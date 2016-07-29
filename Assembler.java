@@ -37,35 +37,49 @@ public class Assembler {
 		System.out.println("===========================================");
 		String out = "";
 		System.out.println("Generated Code ============================");
+		for(int i = 0;i<512;i++){
+			out+=">+";
+		}
+		
+			out+="[<]";
+		
+		for(int i = 0;i<'a';i++){
+			out+=">";
+		}
+		out+="#-#>#-#<<";
+		out+="<<<[<]#";
+		
 		for (String line : prog) {
 			String[] tokens = line.split(" ");
 			switch (tokens[0]) {
 				case "print":
 					char[] stuff = tokens.length==1?" ".toCharArray():line.substring(6).toCharArray();
 					for (char c : stuff) {
-						for (int i = 0; i < c; i++) {
+						out+=">";
+						for (int i = 0; i < c-1; i++) {
 							out += "+";
 						}
-						out += ".[-]";
+						out += ".[-]+<";
 					}
 					break;
 				case "printLine":
-					for (int i = 0; i < '\n'; i++) {
+					out+=">";
+					for (int i = 0; i < '\n'-1; i++) {
 						out += "+";
 					}
-					out += ".[-]";
+					out += ".[-]+<";
 					break;
 				case "for":
-					int pointer = (int) tokens[1].charAt(0);
+					int pointer = tokens[1].charAt(0);
 					for (int i = 0; i < pointer; i++) {
 						out += ">";
 					}
 					out += "[<+<+>>-]";
 					out += "<[<<";
-					for (int i = 0; i < (tokens.length == 2 ? ' ' : tokens[2].charAt(0)); i++) {
+					for (int i = 0; i < (tokens.length == 2 ? ' ' -1: tokens[2].charAt(0)-1); i++) {
 						out += "+";
 					}
-					out += ".[-]";
+					out += ".[-]+";
 					out += ">>-]";
 					out += "<[>>+<<-]>>";
 					for (int i = 0; i < pointer; i++) {
@@ -86,13 +100,9 @@ public class Assembler {
 					}
 					break;
 				case "ld":
-					for (int i = 0; i < (int) 'z' + 2; i++) {
-						out += ">";
-					}
-					out += "+[><<+>>,]";
-					for (int i = 0; i < (int) 'z' + 6; i++) {
-						out += "<";
-					}
+out+=">[>]>>[>]";
+					out += ">+[[<]<[<]<#+#>>>[>]>>[>]>,.]";
+out+="<[<]<<[<]";
 			}
 
 		}
