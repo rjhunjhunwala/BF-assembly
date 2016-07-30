@@ -37,72 +37,88 @@ public class Assembler {
 		System.out.println("===========================================");
 		String out = "";
 		System.out.println("Generated Code ============================");
-		for(int i = 0;i<512;i++){
-			out+=">+";
+		for (int i = 0; i < 510; i++) {
+			out += ">+";
 		}
-		
-			out+="[<]";
-		
-		for(int i = 0;i<'a';i++){
-			out+=">";
+		out += "#";
+		out += "[<]#";
+
+		for (int i = 0; i < 51; i++) {
+			out += ">>>>>>>>>->-";
 		}
-		out+="#-#>#-#<<";
-		out+="<<<[<]#";
-		
+		for (int i = 0; i < 510; i++) {
+			out += "<";
+		}
+		out += "#";
+		int x;
 		for (String line : prog) {
 			String[] tokens = line.split(" ");
 			switch (tokens[0]) {
 				case "print":
-					char[] stuff = tokens.length==1?" ".toCharArray():line.substring(6).toCharArray();
-					for (char c : stuff) {
-						out+=">";
-						for (int i = 0; i < c-1; i++) {
+					for (char c : line.substring(5).toCharArray()) {
+						for (int i = 0; i < c; i++) {
 							out += "+";
 						}
-						out += ".[-]+<";
+						out += ".[-]";
 					}
+
+					break;
+				case "printSpace":
+					x = ' ';
+					for (int i = 0; i < x; i++) {
+						out += "+";
+					}
+					out += ".[-]";
 					break;
 				case "printLine":
-					out+=">";
-					for (int i = 0; i < '\n'-1; i++) {
+					x = '\n';
+					for (int i = 0; i < x; i++) {
 						out += "+";
 					}
-					out += ".[-]+<";
+					out += ".[-]\n";
+					break;
+				case "set":
+					int spot = Integer.parseInt(tokens[1]);
+					int value = Integer.parseInt(tokens[2]);
+					for (int i = 0; i < spot; i++) {
+						for (int j = 0; j < 10; j++) {
+							out += ">";
+						}
+					}
+					out += "<[-]";
+					for (int i = 0; i < value; i++) {
+						out += "+";
+					}
+					out += "#>";
+					for (int i = 0; i < spot; i++) {
+						for (int j = 0; j < 10; j++) {
+							out += "<";
+						}
+					}
+					out+="#";
 					break;
 				case "for":
-					int pointer = tokens[1].charAt(0);
-					for (int i = 0; i < pointer; i++) {
-						out += ">";
+					int index = Integer.parseInt(tokens[1]);
+					String output = (tokens[2]);
+					for (int i = 0; i < index; i++) {
+						for (int j = 0; j < 10; j++) {
+							out += ">";
+						}
 					}
+					out += "<#";
 					out += "[<+<+>>-]";
-					out += "<[<<";
-					for (int i = 0; i < (tokens.length == 2 ? ' ' -1: tokens[2].charAt(0)-1); i++) {
-						out += "+";
+					out += "<<";
+					out += "[>>>>[-]";
+					for (char c : output.toCharArray()) {
+						for (int i = 0; i < c; i++) {
+							out += "+";
+						}
+						out += ".[-]<<<<";
 					}
-					out += ".[-]+";
-					out += ">>-]";
-					out += "<[>>+<<-]>>";
-					for (int i = 0; i < pointer; i++) {
-						out += "<";
-					}
+					out += "-]>[>+<-]";
 					break;
-				case "in":
-					pointer = (int) tokens[1].charAt(0);
-					for (int i = 0; i < pointer; i++) {
-						out += ">";
-					}
-					out += ",";
-					for (int i = 0; i < 48; i++) {
-						out += "-";
-					}
-					for (int i = 0; i < pointer; i++) {
-						out += "<";
-					}
-					break;
-				case "ld":
-out+=">[>]>>[>]";
-					out += ">+[[<]<[<]<#+#>>>[>]>>[>]>,.]";
-out+="<[<]<<[<]";
+				case "rawBF":
+					out += tokens[1];
 			}
 
 		}
