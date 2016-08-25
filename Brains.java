@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package brains;
+
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,9 +24,20 @@ public class Brains {
 		System.out.println("Enter a valid BF program");
 		String bfProg = (new java.util.Scanner(System.in)).nextLine();
 	char[] mem = new char[6400000];
-		int dataPTR = 0;
+		int dataPTR = 50;
 		int pgrPTR = 0;
-		Stack<Integer> stack  = new Stack<>();
+		int[] jumpTable = new int[bfProg.length()];
+		Stack<Integer> stack = new Stack<>();
+		for(int i = 0;i<bfProg.length();i++){
+			if(bfProg.charAt(i)=='['){
+				stack.push(i);
+			}else if(bfProg.charAt(i)==']'){
+                int tmp = stack.pop();
+                jumpTable[tmp] = i;
+				jumpTable[i]=tmp;
+			}
+		}
+System.out.println(Arrays.toString(jumpTable));
 		while (pgrPTR < bfProg.length()) {
 			switch (bfProg.charAt(pgrPTR)) {
 				case '>':
@@ -57,12 +69,10 @@ public class Brains {
 
 					break;
 				case ']':
-					if (mem[dataPTR] != 0) {
-pgrPTR = stack.pop()-1;
-					}
+pgrPTR = jumpTable[pgrPTR]-1;
 					break;
 				case '[':
-					stack.push(pgrPTR);
+if(mem[dataPTR]==0)pgrPTR = jumpTable[pgrPTR];
 					break;
 			}
 
